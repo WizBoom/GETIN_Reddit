@@ -15,24 +15,32 @@ while True:
 	for mod in sr.moderator():
 		modUsernames.append(mod)
 
-	redditUsernames = ['KwG_TwiTCh','WizBoom','TheDreadfulSagittary']
+	#users = [ ['WizBoom', 'Alex Kommorov'] ]
+	users = [ ['KwG_TwiTCh', 'Faith Xarnko'],['WizBoom', 'Alex Kommorov'],['TheDreadfulSagittary', 'LunaWolf Adeptus'] ]
+
 	whitelistUsernames = ['GETINBot']
+
+	redditUsers	= [i[0] for i in users]
 	newUsernames = []
 	removeUsernames = []
 
-	#Check who needs to be added
+	#Check who needs to be removed
 	for name in contributorUsernames:
-		if name not in redditUsernames and name not in whitelistUsernames:
+		if name not in redditUsers and name not in whitelistUsernames:
 			removeUsernames.append(name)
 
-	#Check who needs to get removed
-	for name in redditUsernames:
+	#Check who needs to get added
+	for name in redditUsers:
 		if name not in contributorUsernames:
 			newUsernames.append(name)
 
 	#Add people
-	for redditor in newUsernames:
-		sr.contributor.add(redditor)
+	for index in range(len(newUsernames)):
+		userIndex = redditUsers.index(newUsernames[index])
+		#Add
+		sr.contributor.add(users[userIndex][0])
+		#Give flair
+		sr.flair.set(users[userIndex][0], users[userIndex][1])
 
 	#Remove people
 	for redditor in removeUsernames:
