@@ -3,6 +3,7 @@ import time
 
 SLEEP_TIME = 7200
 while True:
+	print('\nRunning script...')
 	r = praw.Reddit('getin_forum')
 	sr = r.subreddit('GETIN_Eve')
 
@@ -40,13 +41,19 @@ while True:
 		if redditor in modUsernames:
 			sr.moderator.remove(redditor)
 
-	print('ADDED')
-	for name in newUsernames:
-		print(name)
+	print('\nADDED')
+	if len(newUsernames) == 0:
+		print('No new entries')
+	else:
+		for name in newUsernames:
+			print(name)
 
 	print('\nREMOVED')
-	for name in removeUsernames:
-		print(name)
+	if len(removeUsernames) == 0:
+		print('No new entries')
+	else:
+		for name in removeUsernames:
+			print(name)
 
 	time.sleep(SLEEP_TIME)
 
