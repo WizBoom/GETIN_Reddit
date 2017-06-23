@@ -15,8 +15,7 @@ while True:
 	for mod in sr.moderator():
 		modUsernames.append(mod)
 
-	#users = [ ['WizBoom', 'Alex Kommorov'] ]
-	users = [ ['KwG_TwiTCh', 'Faith Xarnko'],['WizBoom', 'Alex Kommorov'],['TheDreadfulSagittary', 'LunaWolf Adeptus'] ]
+	users = [ ['WizBoom', 'Alex Kommorov'] ]
 
 	whitelistUsernames = ['GETINBot']
 
