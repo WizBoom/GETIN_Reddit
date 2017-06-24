@@ -1,10 +1,32 @@
-import praw
-import time
 import logging
+import sqlite3
+import time
+
+import praw
+
 
 SLEEP_TIME = 7200
+
+
+def get_database_info():
+	connection = sqlite3.connect('../getin-auth/data.db')
+	cursor = connection.cursor()
+	cursor.execute("SELECT DISTINCT main, reddit FROM member WHERE reddit != '';")
+	data = cursor.fetchall()
+	connection.close()
+	return [[e[1], e[0]] for e in data]
+
+
+#logging setup
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+logger = logging.getLogger('prawcore')
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
+logging.basicConfig(filename='gettin_reddit.log', level=logging.INFO)
+
 while True:
-	print('\nRunning script...')
+	logging.info('\nRunning script...')
 	r = praw.Reddit('getin_forum')
 	sr = r.subreddit('GETIN_Eve')
 
@@ -16,21 +38,13 @@ while True:
 	for mod in sr.moderator():
 		modUsernames.append(mod)
 
-	users = [ ['WizBoom', 'Alex Kommorov'] ]
+	users = get_database_info()
 
 	whitelistUsernames = ['GETINBot']
 
-	redditUsers	= [i[0] for i in users]
+	redditUsers = [i[0] for i in users]
 	newUsernames = []
 	removeUsernames = []
-
-	# logging setup
-	handler = logging.StreamHandler()
-	handler.setLevel(logging.INFO)
-	logger = logging.getLogger('prawcore')
-	logger.setLevel(logging.INFO)
-	logger.addHandler(handler)
-	logging.basicConfig(filename='log.log',level=logging.INFO)
 
 	#Check who needs to be removed
 	for name in contributorUsernames:
@@ -52,7 +66,6 @@ while True:
 		#Log
 		logger.info(users[userIndex][0] + ", " + users[userIndex][1] + " added!")
 
-
 	#Remove people
 	for redditor in removeUsernames:
 		sr.contributor.remove(redditor)
@@ -61,5 +74,5 @@ while True:
 			sr.moderator.remove(redditor)
 		logger.info(str(redditor) + " removed!")
 
+	logging.info('Sleeping for {} seconds'.format(SLEEP_TIME))
 	time.sleep(SLEEP_TIME)
-
