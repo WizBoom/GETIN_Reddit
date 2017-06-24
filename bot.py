@@ -1,5 +1,6 @@
 import praw
 import time
+import logging
 
 SLEEP_TIME = 7200
 while True:
@@ -23,6 +24,14 @@ while True:
 	newUsernames = []
 	removeUsernames = []
 
+	# logging setup
+	handler = logging.StreamHandler()
+	handler.setLevel(logging.DEBUG)
+	logger = logging.getLogger('prawcore')
+	logger.setLevel(logging.DEBUG)
+	logger.addHandler(handler)
+	logging.basicConfig(filename='log.log',level=logging.DEBUG)
+
 	#Check who needs to be removed
 	for name in contributorUsernames:
 		if name not in redditUsers and name not in whitelistUsernames:
@@ -40,6 +49,9 @@ while True:
 		sr.contributor.add(users[userIndex][0])
 		#Give flair
 		sr.flair.set(users[userIndex][0], users[userIndex][1])
+		#Log
+		logger.info(users[userIndex][0] + ", " + users[userIndex][1] + " added!")
+
 
 	#Remove people
 	for redditor in removeUsernames:
@@ -47,20 +59,7 @@ while True:
 		#Check if its a mod
 		if redditor in modUsernames:
 			sr.moderator.remove(redditor)
-
-	print('\nADDED')
-	if len(newUsernames) == 0:
-		print('No new entries')
-	else:
-		for name in newUsernames:
-			print(name)
-
-	print('\nREMOVED')
-	if len(removeUsernames) == 0:
-		print('No new entries')
-	else:
-		for name in removeUsernames:
-			print(name)
+		logger.info(str(redditor) + " removed!")
 
 	time.sleep(SLEEP_TIME)
 
