@@ -11,7 +11,7 @@ SLEEP_TIME = 7200
 def get_database_info():
 	connection = sqlite3.connect('../getin-auth/data.db')
 	cursor = connection.cursor()
-	cursor.execute("SELECT DISTINCT main, reddit FROM member WHERE reddit != '';")
+	cursor.execute("SELECT DISTINCT main, reddit FROM member WHERE reddit != '' AND status = 'Accepted' AND hidden = 0;")
 	data = cursor.fetchall()
 	connection.close()
 	return [[e[1], e[0]] for e in data]
