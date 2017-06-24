@@ -6,7 +6,7 @@ import praw
 
 
 SLEEP_TIME = 7200
-
+FORMAT = '%(asctime)s - [%(levelname)s] %(message)s'
 
 def get_database_info():
 	connection = sqlite3.connect('../getin-auth/data.db')
@@ -22,11 +22,13 @@ handler = logging.StreamHandler()
 handler.setLevel(logging.INFO)
 logger = logging.getLogger('prawcore')
 logger.setLevel(logging.INFO)
+formatter = logging.Formatter(FORMAT)
+logging.basicConfig(filename='getin_reddit.log',format=FORMAT,level=logging.INFO)
+handler.setFormatter(formatter)
 logger.addHandler(handler)
-logging.basicConfig(filename='gettin_reddit.log', level=logging.INFO)
 
 while True:
-	logging.info('\nRunning script...')
+	logger.info('\nRunning script...')
 	r = praw.Reddit('getin_forum')
 	sr = r.subreddit('GETIN_Eve')
 
@@ -74,5 +76,5 @@ while True:
 			sr.moderator.remove(redditor)
 		logger.info(str(redditor) + " removed!")
 
-	logging.info('Sleeping for {} seconds'.format(SLEEP_TIME))
+	logger.info('Sleeping for {} seconds'.format(SLEEP_TIME))
 	time.sleep(SLEEP_TIME)
