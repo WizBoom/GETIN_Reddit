@@ -26,11 +26,11 @@ while True:
 
 	# logging setup
 	handler = logging.StreamHandler()
-	handler.setLevel(logging.DEBUG)
+	handler.setLevel(logging.INFO)
 	logger = logging.getLogger('prawcore')
-	logger.setLevel(logging.DEBUG)
+	logger.setLevel(logging.INFO)
 	logger.addHandler(handler)
-	logging.basicConfig(filename='log.log',level=logging.DEBUG)
+	logging.basicConfig(filename='log.log',level=logging.INFO)
 
 	#Check who needs to be removed
 	for name in contributorUsernames:
