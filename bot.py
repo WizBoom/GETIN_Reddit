@@ -61,20 +61,27 @@ while True:
 	#Add people
 	for index in range(len(newUsernames)):
 		userIndex = redditUsers.index(newUsernames[index])
-		#Add
-		sr.contributor.add(users[userIndex][0])
-		#Give flair
-		sr.flair.set(users[userIndex][0], users[userIndex][1])
-		#Log
-		logger.info(users[userIndex][0] + ", " + users[userIndex][1] + " added!")
+		try:
+        	#Add
+			sr.contributor.add(users[userIndex][0])
+            #Give flair
+			sr.flair.set(users[userIndex][0], users[userIndex][1])
+           	#Log 
+			logger.info(users[userIndex][0] + ", " + users[userIndex][1] + " added!")
+		except Exception as e:
+			logger.error("Exception trying to add " + users[userIndex][0] + ", " + users[userIndex][1] + " :" + str(e))
 
 	#Remove people
 	for redditor in removeUsernames:
-		sr.contributor.remove(redditor)
-		#Check if its a mod
-		if redditor in modUsernames:
-			sr.moderator.remove(redditor)
-		logger.info(str(redditor) + " removed!")
+		try:
+			sr.contributor.remove(redditor)
+			#Check if its a mod
+			if redditor in modUsernames:
+				sr.moderator.remove(redditor)
+			logger.info(str(redditor) + " removed!")
+		except Exception as e:
+			logger.error("Exception trying to remove " + redditor + ": " + str(e))
+
 
 	logger.info('Sleeping for {} seconds'.format(SLEEP_TIME))
 	time.sleep(SLEEP_TIME)
